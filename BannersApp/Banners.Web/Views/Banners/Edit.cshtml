@@ -1,0 +1,103 @@
+﻿@model Banners.Web.Models.BannerEditModel
+
+@{
+    ViewBag.Title = "Edit Banner";
+}
+
+@using (Html.BeginForm("Edit", "Banners", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h2>@ViewBag.Title </h2>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ValidFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ValidFrom, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ValidFrom, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ValidUntil, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ValidUntil, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ValidUntil, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <span class="control-label col-md-2">Old Image:</span>
+            <div class="col-md-10">
+                <img src="data:image/png;base64,@Convert.ToBase64String(Model.ImageData, 0, Model.ImageData.Length)" width="150" />
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ImageUpload, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ImageUpload, new { type = "file", @class = "form-control" })
+                @Html.ValidationMessage("CustomError")
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Edit" class="btn btn-default" />
+                @Html.ActionLink("Cancel", "Index", "Home", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $('#ValidFrom, #ValidUntil').datetimepicker(
+        {
+            format: 'MM-D-YYYY',
+            sideBySide: true,
+            showTodayButton: true
+        });
+    });
+</script>
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/bootstrap-datetimepicker")
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+@section styles
+{
+    @Styles.Render("~/Content/bootstrap-datetimepicker")
+}
+
+@*<form action="" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div>
+            @Html.LabelFor(m => m.Name)
+            @Html.EditorFor(m => m.Name)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.ValidFrom)
+            @Html.EditorFor(m => m.ValidFrom)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.ValidUntil)
+            @Html.EditorFor(m => m.ValidUntil)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.ImageUpload)
+            @Html.TextBoxFor(m => m.ImageUpload, new { type = "file" })
+        </div>
+        <button type="submit">Create</button>
+    </form>*@

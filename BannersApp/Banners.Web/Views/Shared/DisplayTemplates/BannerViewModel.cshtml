@@ -1,0 +1,15 @@
+﻿@model Banners.Web.Models.BannerViewModel
+
+<div class="col-md-4">
+    <h2>@Model.Name</h2>
+    <img src="data:image/png;base64,@Convert.ToBase64String(Model.ImageData, 0, Model.ImageData.Length)" width="150" />
+
+    <p>ValidUntil:</p>
+    <p>@String.Format("{0:d / MMM / yyyy, dddd}", @Model.ValidUntil)</p>
+    @if (this.User.Identity.IsAuthenticated)
+    {
+        <p>
+            @Html.ActionLink("Edit", "Edit", "Banners", new { id = Model.Id }, new { @class = "btn btn-default" })
+        </p>
+    }
+</div>
