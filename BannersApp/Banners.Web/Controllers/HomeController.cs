@@ -17,7 +17,5 @@ namespace Banners.Web.Controllers
 
             return View(banners);
         }
-
-
     }
 }

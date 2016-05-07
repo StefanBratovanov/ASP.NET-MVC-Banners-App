@@ -91,21 +91,78 @@ namespace Banners.Web.Controllers
 
             if (model != null && this.ModelState.IsValid)
             {
-                byte[] data = new byte[model.ImageUpload.ContentLength];
-                model.ImageUpload.InputStream.Read(data, 0, model.ImageUpload.ContentLength);
+                if (model.ImageUpload != null)
+                {
+                    byte[] data = new byte[model.ImageUpload.ContentLength];
+                    model.ImageUpload.InputStream.Read(data, 0, model.ImageUpload.ContentLength);
+                    bannerToEdit.ImageData = data;
+                    bannerToEdit.FileName = model.ImageUpload.FileName;
+                    bannerToEdit.ImageSize = model.ImageUpload.ContentLength;
+                }
 
                 bannerToEdit.Name = model.Name;
                 bannerToEdit.ValidFrom = model.ValidFrom;
                 bannerToEdit.ValidUntil = model.ValidUntil;
-                bannerToEdit.FileName = model.ImageUpload.FileName;
-                bannerToEdit.ImageSize = model.ImageUpload.ContentLength;
-                bannerToEdit.ImageData = data;
 
                 this.db.SaveChanges();
                 return this.RedirectToAction("Index", "Home");
             }
             return this.View(model);
         }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult Delete(int id)
+        {
+            var bannerToDelete = this.db.Banners
+                .FirstOrDefault(b => b.Id == id);
+
+            if (bannerToDelete == null)
+            {
+                //TODO:add notification
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            var model = new BannerEditModel
+            {
+                Name = bannerToDelete.Name,
+                ValidFrom = bannerToDelete.ValidFrom,
+                ValidUntil = bannerToDelete.ValidUntil,
+                ImageData = bannerToDelete.ImageData
+            };
+
+            return View(model);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var bannerToDelete = this.db.Banners
+                .FirstOrDefault(b => b.Id == id);
+
+            if (bannerToDelete == null)
+            {
+                //TODO:add notification
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            this.db.Banners.Remove(bannerToDelete);
+            this.db.SaveChanges();
+            //TODO:add notification
+
+            return this.RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Active()
+        {
+            var activeBanners = this.db.Banners
+                 .Where(b => b.IsActive)
+                 .Select(BannerViewModel.ViewModel);
+
+            return View(activeBanners);
+        }
+
 
     }
 }

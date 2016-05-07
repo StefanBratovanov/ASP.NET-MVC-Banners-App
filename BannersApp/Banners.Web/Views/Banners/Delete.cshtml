@@ -1,10 +1,10 @@
 ﻿@model Banners.Web.Models.BannerEditModel
 
 @{
-    ViewBag.Title = "Edit Banner";
+    ViewBag.Title = "Are You sure You want to delete this banner?";
 }
 
-@using (Html.BeginForm("Edit", "Banners", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Delete", "Banners", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -39,17 +39,10 @@
                 <img src="data:image/png;base64,@Convert.ToBase64String(Model.ImageData, 0, Model.ImageData.Length)" width="150" />
             </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.ImageUpload, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.ImageUpload, new { type = "file", @class = "form-control" })
-                @Html.ValidationMessage("CustomError")
-            </div>
-        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Edit" class="btn btn-primary" />
+                <input type="submit" value="Delete" class="btn btn-primary" />
                 @Html.ActionLink("Cancel", "Index", "Home", null, new { @class = "btn btn-default" })
             </div>
         </div>
@@ -64,6 +57,8 @@
             sideBySide: true,
             showTodayButton: true
         });
+
+        $('.col-md-10 :input:not([value="Delete"])').attr("disabled", true);
     });
 </script>
 

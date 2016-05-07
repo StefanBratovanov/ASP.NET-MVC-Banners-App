@@ -249,6 +249,7 @@
     <Content Include="Views\Banners\Add.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\BannerViewModel.cshtml" />
     <Content Include="Views\Banners\Edit.cshtml" />
+    <Content Include="Views\Banners\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Banners.Common\Banners.Common.csproj">
