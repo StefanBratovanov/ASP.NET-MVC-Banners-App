@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Banners.Web.Models.BannerViewModel>
+
+@{
+    ViewBag.Title = "Acive Banners";
+}
+
+<div class="well">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="row">
+    @Html.DisplayFor(x => x)
+</div>
+
+<script>
+
+    $(function () {
+        setInterval(function () {
+            $(".col-md-3").shuffle();
+        }, 2500);
+    });
+
+
+    $.fn.shuffle = function () {
+        var allElems = this.get(),
+            getRandom = function (max) {
+                return Math.floor(Math.random() * max);
+            },
+            shuffled = $.map(allElems, function () {
+                var random = getRandom(allElems.length),
+                    randEl = $(allElems[random]).clone(true)[0];
+                allElems.splice(random, 1);
+                return randEl;
+            });
+
+        this.each(function (i) {
+            $(this).replaceWith($(shuffled[i]));
+        });
+
+        return $(shuffled);
+    };
+
+</script>

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -157,7 +158,8 @@ namespace Banners.Web.Controllers
         public ActionResult Active()
         {
             var activeBanners = this.db.Banners
-                 .Where(b => b.IsActive)
+                 .Where(b => b.ValidUntil > DateTime.Now)
+                 .OrderBy(x => Guid.NewGuid())
                  .Select(BannerViewModel.ViewModel);
 
             return View(activeBanners);

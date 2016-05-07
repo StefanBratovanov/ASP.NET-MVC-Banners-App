@@ -12,7 +12,6 @@ namespace Banners.Web.Controllers
         public ActionResult Index()
         {
             var banners = this.db.Banners
-                 .Where(b => b.IsActive)
                  .Select(BannerViewModel.ViewModel);
 
             return View(banners);

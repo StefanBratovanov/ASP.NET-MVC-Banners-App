@@ -25,8 +25,8 @@
                 <ul class="nav navbar-nav">
                     @if (Request.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Add banner", "Add", "Banners")</li>
                         <li>@Html.ActionLink("Active Banners", "Active", "Banners")</li>
+                        <li>@Html.ActionLink("Add banner", "Add", "Banners")</li>
                         @* <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                     }
                 </ul>
