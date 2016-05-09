@@ -176,6 +176,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Extensions\NotificationExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -251,6 +252,7 @@
     <Content Include="Views\Banners\Edit.cshtml" />
     <Content Include="Views\Banners\Delete.cshtml" />
     <Content Include="Views\Banners\Active.cshtml" />
+    <Content Include="Views\Shared\_Notifications.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Banners.Common\Banners.Common.csproj">

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Banners.Models;
+using Banners.Web.Extensions;
 using Banners.Web.Models;
 using Microsoft.AspNet.Identity;
 
@@ -13,7 +14,7 @@ namespace Banners.Web.Controllers
     {
         public ActionResult Add()
         {
-            return View();
+            return this.View();
         }
 
         [HttpPost]
@@ -26,8 +27,8 @@ namespace Banners.Web.Controllers
                 if (model.ImageUpload == null || model.ImageUpload.ContentLength == 0)
                 {
                     this.ModelState.AddModelError("ImageUpload", "This field is required");
-                    //TODO:add notification
-                    return this.RedirectToAction("Index", "Home");
+                    this.AddNotification("Adding banner failed, Image needed", NotificationType.ERROR);
+                    return this.View();
                 }
 
                 byte[] data = new byte[model.ImageUpload.ContentLength];
@@ -45,12 +46,12 @@ namespace Banners.Web.Controllers
 
                 this.db.Banners.Add(banner);
                 this.db.SaveChanges();
-                //TODO:add notification
+                this.AddNotification("Banner successfuly created", NotificationType.SUCCESS);
 
                 return this.RedirectToAction("Index", "Home");
             }
 
-            return View();
+            return this.View();
         }
 
         [HttpGet]
@@ -62,7 +63,7 @@ namespace Banners.Web.Controllers
 
             if (bannerToEdit == null)
             {
-                //TODO:add notification
+                this.AddNotification("Can not load this banner", NotificationType.ERROR);
                 return this.RedirectToAction("Index", "Home");
             }
 
@@ -74,7 +75,7 @@ namespace Banners.Web.Controllers
                 ImageData = bannerToEdit.ImageData
             };
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
@@ -86,7 +87,7 @@ namespace Banners.Web.Controllers
 
             if (bannerToEdit == null)
             {
-                //TODO:add notification
+                this.AddNotification("Can not edit this banner", NotificationType.ERROR);
                 return this.RedirectToAction("Index", "Home");
             }
 
@@ -106,6 +107,7 @@ namespace Banners.Web.Controllers
                 bannerToEdit.ValidUntil = model.ValidUntil;
 
                 this.db.SaveChanges();
+                this.AddNotification("Banner successfuly edited", NotificationType.SUCCESS);
                 return this.RedirectToAction("Index", "Home");
             }
             return this.View(model);
@@ -120,7 +122,7 @@ namespace Banners.Web.Controllers
 
             if (bannerToDelete == null)
             {
-                //TODO:add notification
+                this.AddNotification("Can not load this banner", NotificationType.ERROR);
                 return this.RedirectToAction("Index", "Home");
             }
 
@@ -132,7 +134,7 @@ namespace Banners.Web.Controllers
                 ImageData = bannerToDelete.ImageData
             };
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -144,13 +146,13 @@ namespace Banners.Web.Controllers
 
             if (bannerToDelete == null)
             {
-                //TODO:add notification
+                this.AddNotification("Can not load this banner", NotificationType.ERROR);
                 return this.RedirectToAction("Index", "Home");
             }
 
             this.db.Banners.Remove(bannerToDelete);
             this.db.SaveChanges();
-            //TODO:add notification
+            this.AddNotification("Banner successfuly deleted", NotificationType.SUCCESS);
 
             return this.RedirectToAction("Index", "Home");
         }
@@ -162,10 +164,8 @@ namespace Banners.Web.Controllers
                  .OrderBy(x => Guid.NewGuid())
                  .Select(BannerViewModel.ViewModel);
 
-            return View(activeBanners);
+            return this.View(activeBanners);
         }
-
-
     }
 }
 

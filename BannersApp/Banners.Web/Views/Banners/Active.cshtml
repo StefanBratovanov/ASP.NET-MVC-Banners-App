@@ -4,8 +4,8 @@
     ViewBag.Title = "Acive Banners";
 }
 
-<div class="well">
-    <h3>@ViewBag.Title</h3>
+<div class="active">
+    <h2>@ViewBag.Title</h2>
 </div>
 
 <div class="row">
@@ -13,31 +13,61 @@
 </div>
 
 <script>
-
     $(function () {
         setInterval(function () {
-            $(".col-md-3").shuffle();
-        }, 2500);
+            //$(".col-md-3").shuffleArray();
+            $(".col-md-3").shuffleArray();
+        }, 1500);
     });
 
+    $.fn.shuffleArray = function () {
+        var elements = this.get();
+        var shuffled = [];
+        var placeholders = [];
 
-    $.fn.shuffle = function () {
-        var allElems = this.get(),
-            getRandom = function (max) {
-                return Math.floor(Math.random() * max);
-            },
-            shuffled = $.map(allElems, function () {
-                var random = getRandom(allElems.length),
-                    randEl = $(allElems[random]).clone(true)[0];
-                allElems.splice(random, 1);
-                return randEl;
-            });
+        for (var i = 0; i < elements.length; i++) {
+            var randumberomN;
+            do {
+                randumberomN = Math.floor(Math.random() * elements.length);
+                var keys = Object.keys(shuffled);
+                if (randumberomN === i
+                    && !contains(keys, randumberomN)
+                    && shuffled.length === elements.length - 1) {
+                    break;
+                }
 
-        this.each(function (i) {
-            $(this).replaceWith($(shuffled[i]));
-        });
+
+            } while (randumberomN === i || contains(keys, randumberomN))
+
+            shuffled[randumberomN] = elements[i];
+        }
+
+        function contains(array, element) {
+            var i = array.length;
+            while (i--) {
+                if (array[i] == element) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // replace all elements with a plcaceholder
+        for (var i = 0; i < elements.length; i++) {
+            var placeholder = document.createTextNode('');
+            findAndReplace(elements[i], placeholder);
+            placeholders.push(placeholder);
+        }
+
+        // replace the placeholders with the shuffled elements
+        for (var i = 0; i < elements.length; i++) {
+            findAndReplace(placeholders[i], shuffled[i]);
+        }
 
         return $(shuffled);
-    };
+    }
 
+    function findAndReplace(find, replace) {
+        find.parentNode.replaceChild(replace, find);
+    }
 </script>
