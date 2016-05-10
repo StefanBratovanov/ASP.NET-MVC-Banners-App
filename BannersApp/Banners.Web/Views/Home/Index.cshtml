@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Banners.Web.Models.BannerViewModel>
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Banners.Web.Models.BannerViewModel>
 
 @{
     ViewBag.Title = "All banners";
@@ -10,4 +11,8 @@
 
 <div class="row">
     @Html.DisplayFor(x => x)
+</div>
+
+<div>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </div>

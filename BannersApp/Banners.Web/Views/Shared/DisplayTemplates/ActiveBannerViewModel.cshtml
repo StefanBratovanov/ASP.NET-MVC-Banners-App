@@ -1,12 +1,12 @@
-﻿@model Banners.Web.Models.BannerViewModel
+﻿@model Banners.Web.Models.ActiveBannerViewModel
 
 <div class="col-md-3 panel panel-default" id="@Model.Id">
     <div class="panel-heading">@Model.Name</div>
     <div class="panel-body">
         <img src="data:image/png;base64,@Convert.ToBase64String(Model.ImageData, 0, Model.ImageData.Length)" width="100" />
 
-        @*<p>ValidUntil:</p>*@
-        @*<p>@String.Format("{0:d / MMM / yyyy, dddd}", @Model.ValidUntil)</p>*@
+        <p>ValidUntil:</p>
+        <p>@String.Format("{0:d / MMM / yyyy, dddd}", @Model.ValidUntil)</p>
         @if (this.User.Identity.IsAuthenticated)
         {
             <p>

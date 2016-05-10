@@ -1,10 +1,10 @@
-﻿using System.Data.Entity;
-using Banners.Data.Migrations;
-using Banners.Models;
-using Microsoft.AspNet.Identity.EntityFramework;
-
-namespace Banners.Data
+﻿namespace Banners.Data
 {
+    using System.Data.Entity;
+    using Banners.Data.Migrations;
+    using Banners.Models;
+    using Microsoft.AspNet.Identity.EntityFramework;
+
     public class BannersDbContext : IdentityDbContext<ApplicationUser>
     {
         public BannersDbContext()

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Banners.Web.Models.BannerViewModel>
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Banners.Web.Models.ActiveBannerViewModel>
 
 @{
     ViewBag.Title = "Acive Banners";
@@ -12,12 +13,15 @@
     @Html.DisplayFor(x => x)
 </div>
 
+<div>
+    @Html.PagedListPager(Model, page => Url.Action("Active", new { page }))
+</div>
+
 <script>
     $(function () {
         setInterval(function () {
-            //$(".col-md-3").shuffleArray();
             $(".col-md-3").shuffleArray();
-        }, 1500);
+        }, 10000);
     });
 
     $.fn.shuffleArray = function () {

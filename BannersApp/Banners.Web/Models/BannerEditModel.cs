@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-
-namespace Banners.Web.Models
+﻿namespace Banners.Web.Models
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Web;
+
     public class BannerEditModel
     {
         [Required(ErrorMessage = "Name is required")]

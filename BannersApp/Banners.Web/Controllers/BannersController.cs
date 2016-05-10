@@ -1,15 +1,14 @@
-﻿
-using System;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Banners.Models;
-using Banners.Web.Extensions;
-using Banners.Web.Models;
-using Microsoft.AspNet.Identity;
-
-namespace Banners.Web.Controllers
+﻿namespace Banners.Web.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using Banners.Common;
+    using Banners.Models;
+    using Banners.Web.Extensions;
+    using Banners.Web.Models;
+    using PagedList;
+
     public class BannersController : BaseController
     {
         public ActionResult Add()
@@ -21,6 +20,12 @@ namespace Banners.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add(BannerInputModel model)
         {
+            var validImageTypes = new string[]
+            {
+                "image/gif",
+                "image/jpeg",
+                "image/png"
+            };
 
             if (model != null && this.ModelState.IsValid)
             {
@@ -28,6 +33,18 @@ namespace Banners.Web.Controllers
                 {
                     this.ModelState.AddModelError("ImageUpload", "This field is required");
                     this.AddNotification("Adding banner failed, Image needed", NotificationType.ERROR);
+                    return this.View();
+                }
+                if (!validImageTypes.Contains(model.ImageUpload.ContentType))
+                {
+                    this.ModelState.AddModelError("ImageUpload", "Please choose either a GIF, JPG or PNG image.");
+                    this.AddNotification("Please choose either a GIF, JPG or PNG image.", NotificationType.ERROR);
+                    return this.View();
+                }
+
+                if (model.ValidUntil < model.ValidFrom)
+                {
+                    this.AddNotification("Valid Until must be later than Valid From", NotificationType.ERROR);
                     return this.View();
                 }
 
@@ -91,7 +108,13 @@ namespace Banners.Web.Controllers
                 return this.RedirectToAction("Index", "Home");
             }
 
-            if (model != null && this.ModelState.IsValid)
+            if (model.ValidUntil < model.ValidFrom)
+            {
+                this.AddNotification("Edting banner failed, Valid Until must be later than Valid From", NotificationType.ERROR);
+                return this.RedirectToAction("Edit", "Banners");
+            }
+
+            if (this.ModelState.IsValid)
             {
                 if (model.ImageUpload != null)
                 {
@@ -157,15 +180,15 @@ namespace Banners.Web.Controllers
             return this.RedirectToAction("Index", "Home");
         }
 
-        public ActionResult Active()
+        public ActionResult Active(int? page)
         {
             var activeBanners = this.db.Banners
                  .Where(b => b.ValidUntil > DateTime.Now)
                  .OrderBy(x => Guid.NewGuid())
-                 .Select(BannerViewModel.ViewModel);
+                 .Select(ActiveBannerViewModel.ViewModel)
+                 .ToPagedList(page ?? GlobalConstants.DefaultPageNumber, GlobalConstants.DefaultPageSize);
 
             return this.View(activeBanners);
         }
     }
 }
-

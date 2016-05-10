@@ -4,7 +4,7 @@
     using System.Linq.Expressions;
     using Banners.Models;
 
-    public class BannerViewModel
+    public class ActiveBannerViewModel
     {
         public int Id { get; set; }
 
@@ -12,15 +12,21 @@
 
         public byte[] ImageData { get; set; }
 
-        public static Expression<Func<Banner, BannerViewModel>> ViewModel
+        public DateTime ValidFrom { get; set; }
+
+        public DateTime ValidUntil { get; set; }
+
+        public static Expression<Func<Banner, ActiveBannerViewModel>> ViewModel
         {
             get
             {
-                return b => new BannerViewModel()
+                return b => new ActiveBannerViewModel()
                 {
                     Id = b.Id,
                     Name = b.Name,
                     ImageData = b.ImageData,
+                    ValidFrom = b.ValidFrom,
+                    ValidUntil = b.ValidUntil
                 };
             }
         }

@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Banners.Web.Models;
-
-namespace Banners.Web.Controllers
+﻿namespace Banners.Web.Controllers
 {
+    using System.Linq;
+    using System.Web.Mvc;
+    using Banners.Common;
+    using Banners.Web.Models;
+    using PagedList;
+
     public class HomeController : BaseController
     {
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
             var banners = this.db.Banners
-                 .Select(BannerViewModel.ViewModel);
+                 .OrderBy(b => b.Id)
+                 .Select(BannerViewModel.ViewModel)
+                 .ToPagedList(page ?? GlobalConstants.DefaultPageNumber, GlobalConstants.DefaultPageSize);
 
-            return View(banners);
+            return this.View(banners);
         }
     }
 }
